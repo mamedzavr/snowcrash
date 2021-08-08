@@ -1,0 +1,49 @@
+-Вглянем на файлы в директории
+
+level09@SnowCrash:~$ ls -l
+total 12
+-rwsr-sr-x 1 flag09 level09 7640 Mar  5  2016 level09
+----r--r-- 1 flag09 level09   26 Mar  5  2016 token
+level09@SnowCrash:~$ cat token
+f4kmm6p|=�p�n��DB�Du{��
+
+
+-С помощью ASCII вывести содержимое токена у нас не получилось, используем ltrace
+
+level09@SnowCrash:~$ ./level09 
+You need to provied only one arg.
+level09@SnowCrash:~$ ltrace ./level09 token
+__libc_start_main(0x80487ce, 2, 0xbffff6e4, 0x8048aa0, 0x8048b10 <unfinished ...>
+ptrace(0, 0, 1, 0, 0xb7e2fe38)                   = -1
+puts("You should not reverse this"You should not reverse this
+)              = 28
++++ exited (status 1) +++
+level09@SnowCrash:~$ ./level09 kek
+kfm
+level09@SnowCrash:~$ ./level09 level09
+lfxhp5?
+level09@SnowCrash:~$ ./level09 abc
+ace
+
+
+-Наш экзекьютбл шифрует строку, добавляя по аскии таблице каждому символу свой индекс. Проведем обратную операцию с помощью программы
+
+level09@SnowCrash:~$ cd /tmp
+level09@SnowCrash:~$ vim script.c
+level09@SnowCrash:/tmp$ gcc -std=c99 script.c -o script
+level09@SnowCrash:/tmp$ ./script `cat ~/token`
+f3iji1ju5yuevaus41q1afiuq
+level09@SnowCrash:/tmp$ su flag09
+Password: f3iji1ju5yuevaus41q1afiuq
+Don't forget to launch getflag !
+flag09@SnowCrash:~$ getflag
+Check flag.Here is your token : s5cAJpM8ev6XHw998pRWG728z
+flag09@SnowCrash:~$ su level10
+Password: s5cAJpM8ev6XHw998pRWG728z
+
+
+
+
+
+
+
